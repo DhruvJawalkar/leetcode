@@ -1,3 +1,4 @@
+[Discussion Post (created on 25/0/2021 at 9:10)](https://leetcode.com/problems/validate-binary-search-tree/solution/)  
 <h2>98. Validate Binary Search Tree</h2><h3>Medium</h3><hr><div><p>Given the <code>root</code> of a binary tree, <em>determine if it is a valid binary search tree (BST)</em>.</p>
 
 <p>A <strong>valid BST</strong> is defined as follows:</p>
