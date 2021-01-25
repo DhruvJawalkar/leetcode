@@ -18,13 +18,13 @@ class Solution {
         return helper(root, null, null);
     }
     
-    private static boolean helper(TreeNode node, Integer low, Integer high){
+    private boolean helper(TreeNode node, Integer low, Integer high){
         if(node==null)
             return true;
         
-        if((low!=null && node.val<=low) || (high!=null && node.val>=high))
+        if((high!=null && node.val>=high) || (low!=null && node.val<=low))
             return false;
         
         return helper(node.left, low, node.val) && helper(node.right, node.val, high); 
-    }
+    }
 }
