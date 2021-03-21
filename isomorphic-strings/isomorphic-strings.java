@@ -1,13 +1,45 @@
+/*
+TC - O(n)
+SC - O(n)
+
+Input: s = "egg", t = "add"
+{
+e: a
+g: d
+}
+
+{
+a: e
+d: g
+}
+*/
+
 class Solution {
-public boolean isIsomorphic (String s, String t) {
-        int[] m1 = new int[256];
-        int[] m2 = new int[256];
-        int n = s.length();
-        for (int i = 0; i < n; i++) {
-            if (m1[s.charAt(i)] != m2[t.charAt(i)]) return false;
-            m1[s.charAt(i)] = i + 1;
-            m2[t.charAt(i)] = i + 1;
+    public boolean isIsomorphic(String s, String t) {
+        //init 2 hashmaps
+        HashMap<Character, Character> mapping = new HashMap<>();
+        HashMap<Character, Character> revMapping = new HashMap<>();
+        
+        //iterate over a string 
+            //check in rev mapping if mapping already exists
+            //else check if char exists in mapping and maps to same char
+        for(int i=0; i<s.length(); i++){
+            char a = s.charAt(i);
+            char b = t.charAt(i);
+            
+            if(revMapping.containsKey(b) && revMapping.get(b)!=a)
+                return false;
+            
+            if(mapping.containsKey(a) && mapping.get(a)!=b)
+                return false;
+            
+            if(!mapping.containsKey(a)){
+                mapping.put(a, b);
+                revMapping.put(b, a);
+            }
         }
+        
+        //return true if reaches the end
         return true;
     }
 }
