@@ -1,3 +1,4 @@
+[Discussion Post (created on 20/3/2021 at 9:57)](https://leetcode.com/problems/longest-substring-without-repeating-characters/solution/)  
 <h2>3. Longest Substring Without Repeating Characters</h2><h3>Medium</h3><hr><div><p>Given a string <code>s</code>, find the length of the <b>longest substring</b> without repeating characters.</p>
 
 <p>&nbsp;</p>
