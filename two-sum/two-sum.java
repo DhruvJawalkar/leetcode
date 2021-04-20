@@ -1,24 +1,24 @@
 /*
+Input: nums = [2,7,11,15], target = 9
+numLookupMap = {
+    2: 0
+}
+
 TC - O(n)
 SC - O(n)
-
-Ex: nums = [2,7,11,15], target = 9
 */
-
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashMap<Integer, Integer> numLookupMap = new HashMap<>();
         
-        int complement;
         for(int i=0; i<nums.length; i++){
-            complement = target - nums[i];
+            if(numLookupMap.containsKey(target-nums[i]))
+                return new int[]{numLookupMap.get(target-nums[i]), i};
             
-            if(map.containsKey(complement))
-                return new int[]{i, map.get(complement)};
-            
-            map.put(nums[i], i);
+            else
+                numLookupMap.put(nums[i], i);
         }
         
-        throw new IllegalArgumentException("No two sum solution");
+        return new int[]{-1,-1};
     }
 }
