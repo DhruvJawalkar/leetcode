@@ -1,17 +1,41 @@
+/*
+Ex:         ["a","b","1","2","b","b","b","b","b","b","b","b","b"]
+                                                              i
+curCount=12
+                             idx
+
+TC - O(n)
+SC - O(log n)     
+*/
+
 class Solution {
     public int compress(char[] chars) {
-        int anchor = 0, write = 0;
-        for (int read = 0; read < chars.length; read++) {
-            if (read + 1 == chars.length || chars[read + 1] != chars[read]) {
-                chars[write++] = chars[anchor];
-                if (read > anchor) {
-                    for (char c: ("" + (read - anchor + 1)).toCharArray()) {
-                        chars[write++] = c;
+        if(chars.length==1)
+            return 1;
+        
+        char curCount = 1;
+        int idx = 0;
+        int n = chars.length;
+        
+        for(int i=0; i<n; i++){
+            if(i==n-1 || chars[i]!=chars[i+1]){
+                chars[idx++] = chars[i];
+                
+                if(curCount>1){
+                    String countStr = Integer.toString(curCount);    
+                    
+                    for(char digit : countStr.toCharArray()){
+                        chars[idx++] = digit;
                     }
                 }
-                anchor = read + 1;
+                
+                curCount = 1;
+            }
+            else{
+                curCount += 1;
             }
         }
-        return write;
+        
+        return idx;
     }
 }
