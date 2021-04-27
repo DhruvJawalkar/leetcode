@@ -1,14 +1,40 @@
-public class Solution {
+/*
+Ex: "abcabcbb"
+            i
+            j
+maxLength = 3
+map = {
+    a : 3
+    b : 1
+    c : 2
+}
+
+Exp - 3
+output - 3
+
+TC - O(n), n is length of string
+SC - O(n) 
+*/
+class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int n = s.length(), maxLength = 0;
-        Map<Character, Integer> map = new HashMap<>(); 
+        if(s==null || s.length()==0)
+            return 0;
         
-        for (int j = 0, i = 0; j < n; j++) {
-            if (map.containsKey(s.charAt(j))) {
-                i = Math.max(i, map.get(s.charAt(j))+1);
+        HashMap<Character, Integer> map = new HashMap<>();
+        int i = 0;
+        int maxLength = 1;
+        
+        for(int j=0; j<s.length(); j++){
+            char ch = s.charAt(j);
+            
+            if(!map.containsKey(ch) || map.get(ch)<i){
+                map.put(ch, j);
+                maxLength = Math.max(maxLength, j-i+1);
             }
-            maxLength = Math.max(maxLength, j - i + 1);
-            map.put(s.charAt(j), j);
+            else{
+                i = map.get(ch)+1;
+                map.put(ch, j);
+            }
         }
         
         return maxLength;
