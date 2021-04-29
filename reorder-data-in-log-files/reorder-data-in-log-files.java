@@ -1,27 +1,49 @@
+/*
+TC - O(M * N log N), M is max length of log, N is #logs
+SC - O(M log N)
+*/
 class Solution {
-    public String[] reorderLogFiles(String[] logs) {
-        
-        Comparator<String> myComp = new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                int s1SpaceIndex = s1.indexOf(' ');
-                int s2SpaceIndex = s2.indexOf(' ');
-                char s1FirstCharacter = s1.charAt(s1SpaceIndex+1);
-                char s2FirstCharacter = s2.charAt(s2SpaceIndex+1);
-                
-                if (s1FirstCharacter <= '9') {
-                    if (s2FirstCharacter <= '9') return 0;
-                    else return 1;
-                }
-                if (s2FirstCharacter <= '9') return -1;
-                
-                int preCompute = s1.substring(s1SpaceIndex+1).compareTo(s2.substring(s2SpaceIndex+1));
-                if (preCompute == 0) return s1.substring(0,s1SpaceIndex).compareTo(s2.substring(0,s2SpaceIndex));
-                return preCompute;
+    private class LogsComparator implements Comparator<String>{
+        @Override
+        public int compare(String log1, String log2){
+            int idx1 = log1.indexOf(" ");
+            int idx2 = log2.indexOf(" ");
+            
+            boolean log1IsDigitType = Character.isDigit(log1.charAt(idx1+1)); 
+            boolean log2IsDigitType = Character.isDigit(log2.charAt(idx2+1));
+            
+            if(log1IsDigitType && log2IsDigitType){
+                return 0;
             }
-        };
+            else if(log1IsDigitType){
+                return 1;
+            }
+            else if(log2IsDigitType){
+                return -1;
+            }
+            else{
+                String log1Content = log1.substring(idx1+1);
+                String log2Content = log2.substring(idx2+1);
+                
+                if(log1Content.equals(log2Content)){
+                    String log1Identifier = log1.substring(0, idx1);
+                    String log2Identifier = log2.substring(0, idx2);
+                    return log1Identifier.compareTo(log2Identifier);
+                }
+                else{
+                    return log1Content.compareTo(log2Content);   
+                }
+            }
+        }
+    }
+    
+    public String[] reorderLogFiles(String[] logs) {
+        //base case
+        if(logs.length==1)
+            return logs;
         
-        Arrays.sort(logs, myComp);
+        Arrays.sort(logs, new LogsComparator());
+        
         return logs;
     }
 }
