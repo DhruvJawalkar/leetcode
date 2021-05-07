@@ -12,29 +12,31 @@
  *         this.right = right;
  *     }
  * }
+ 
+ TC - O(n)
+ SC - O(n) worst case, O(log n) avg case for recursion stack space
+ 
+ Input: root = [-10,9,20,null,null,15,7]
+ maxOverall = 42
  */
 class Solution {
-    int max = Integer.MIN_VALUE;
-
+    int maxOverall = Integer.MIN_VALUE;
+    
     public int maxPathSum(TreeNode root) {
-        if(root==null)
-            return 0;
-        
         helper(root);
-
-        return max;            
+        
+        return maxOverall;
     }
     
     private int helper(TreeNode node){
         if(node==null)
             return 0;
-
+        
         int maxFromLeft = Math.max(helper(node.left), 0);
-        int maxFromRight = Math.max(helper(node.right), 0);  
-        int maxValFromCurrentNode = node.val + Math.max(maxFromLeft, maxFromRight);
-
-        max = Math.max(max, node.val + maxFromLeft + maxFromRight);
-
-        return maxValFromCurrentNode;    
+        int maxFromRight = Math.max(helper(node.right), 0);
+        
+        maxOverall =  Math.max(maxOverall, node.val + maxFromLeft + maxFromRight);
+        
+        return node.val + Math.max(maxFromLeft, maxFromRight);
     }
 }
