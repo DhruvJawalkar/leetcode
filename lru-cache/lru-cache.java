@@ -1,38 +1,33 @@
+/*
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+
+TC - O(1), for init(), get(), put()
+SC - O(capacity), for cache
+
+
+*/
 class LRUCache {
-    class DLNode{
+    private class Node {
         int key;
         int val;
-        DLNode prev;
-        DLNode next;
+        Node next;
+        Node prev;
         
-        public DLNode(){}
-        
-        public DLNode(int key, int val){
-            this.key = key;
-            this.val = val;
+        public Node(){}
+        public Node(int k, int v){
+            this.key = k;
+            this.val = v;
         }
     }
     
-    HashMap<Integer, DLNode> cache;
-    int capacity;
+    private HashMap<Integer, Node> cache;
+    private int capacity;
+    private Node head, tail;
     
-    DLNode head, tail;
-    
-    public LRUCache(int capacity) {
-        cache = new HashMap<>();
-        
-        head = new DLNode();
-        tail = new DLNode();
-        
-        head.next = tail;
-        tail.prev = head;
-        
-        this.capacity = capacity;
-    }
-    
-    private void removeNode(DLNode node){
-        DLNode prev = node.prev;
-        DLNode next = node.next;
+    private void removeNode(Node node){
+        Node prev = node.prev;
+        Node next = node.next;
         
         prev.next = next;
         next.prev = prev;
@@ -41,50 +36,58 @@ class LRUCache {
         node.next = null;
     }
     
-    
-    private void addToHeadNext(DLNode node){
-        DLNode temp = head.next;
-        head.next = node;
-        node.prev = head;
-        
+    private void addToHead(Node node){
+        Node temp = this.head.next;
+        this.head.next = node;
+        node.prev = this.head;
         node.next = temp;
         temp.prev = node;
     }
     
+    private void evictTail(){
+        Node toEvict = this.tail.prev;
+        removeNode(toEvict);
+        
+        this.cache.remove(toEvict.key);
+    }
+    
+    public LRUCache(int capacity) {
+        this.cache = new HashMap<>(capacity);
+        this.capacity = capacity;
+        this.head = new Node();
+        this.tail = new Node();
+        
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+    
     public int get(int key) {
-        if(!cache.containsKey(key))
+        if(this.cache.containsKey(key)){
+            Node node = this.cache.get(key);
+            removeNode(node);
+            addToHead(node);
+            return node.val;
+        }
+        else{
             return -1;
-        
-        DLNode node = cache.get(key);
-        
-        removeNode(node);
-        addToHeadNext(node);
-        
-        return node.val;
+        }
     }
     
     public void put(int key, int value) {
-        //if cache contains key or size()<capacity put as usual move DLNode to headNext
-        if(!cache.containsKey(key) && cache.size() < capacity){
-            DLNode newNode = new DLNode(key, value);
-            cache.put(key, newNode);
-            addToHeadNext(newNode);
-        }
-        else if(cache.containsKey(key)){
-            DLNode node = cache.get(key);
+        if(this.cache.containsKey(key)){
+            Node node = this.cache.get(key);
             node.val = value;
-            
             removeNode(node);
-            addToHeadNext(node);
+            addToHead(node);
         }
-        //else remove node from tail.prev, remove cache entry, add new key,val to cache and movetohead
         else{
-            DLNode nodeToEvict = tail.prev;
+            if(this.cache.size() == this.capacity){
+                evictTail();
+            }    
             
-            removeNode(nodeToEvict);
-            cache.remove(nodeToEvict.key);
-            
-            this.put(key, value);
+            Node newNode = new Node(key, value);
+            this.cache.put(key, newNode);
+            addToHead(newNode);                
         }
     }
 }
